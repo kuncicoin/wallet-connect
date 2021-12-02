@@ -111,7 +111,7 @@ function App(): React.ReactElement {
 
   return (
     <div className="App">
-      <h1>Wallet Adapter Demo</h1>
+      <h1>Wallet Connect Demo</h1>
       <div>Network: {network}</div>
       <div>
         Waller provider:{' '}
