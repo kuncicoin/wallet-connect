@@ -1494,7 +1494,7 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
-"@project-serum/sol-wallet-adapter@link:..":
+"@kunci/wallet-connect@link:..":
   version "0.0.0"
   uid ""
 

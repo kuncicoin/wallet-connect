@@ -6,7 +6,7 @@ import {
   SystemProgram,
   Transaction,
   clusterApiUrl,
-} from '@solana/web3.js';
+} from '@kunci/web3.js';
 
 function toHex(buffer: Buffer) {
   return Array.prototype.map
@@ -20,8 +20,8 @@ function App(): React.ReactElement {
     setLogs((logs) => [...logs, log]);
   }
 
-  const network = clusterApiUrl('devnet');
-  const [providerUrl, setProviderUrl] = useState('https://www.sollet.io');
+  const network = clusterApiUrl('testnet');
+  const [providerUrl, setProviderUrl] = useState('https://kunciwallet.com');
   const connection = useMemo(() => new Connection(network), [network]);
   const urlWallet = useMemo(
     () => new Wallet(providerUrl, network),

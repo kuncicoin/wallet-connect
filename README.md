@@ -1,14 +1,14 @@
-[![npm (scoped)](https://img.shields.io/npm/v/@project-serum/sol-wallet-adapter)](https://www.npmjs.com/package/@project-serum/sol-wallet-adapter)
+[![npm (scoped)](https://img.shields.io/npm/v/@kunci/wallet-connect)](https://www.npmjs.com/package/@kunci/wallet-connect)
 [![Build Status](https://travis-ci.com/project-serum/sol-wallet-adapter.svg?branch=master)](https://travis-ci.com/project-serum/sol-wallet-adapter)
 
-# sol-wallet-adapter
+# wallet-connect
 
-Library to allow Solana dApps to use third-party wallets to sign transactions.
+Library to allow Kunci dApps to use third-party wallets to sign transactions.
 
 ## Install
 
 ```bash
-npm install --save @project-serum/sol-wallet-adapter
+npm install --save @kunci/wallet-connect
 ```
 
 ## Usage
@@ -16,10 +16,10 @@ npm install --save @project-serum/sol-wallet-adapter
 ### Sign a transaction
 
 ```js
-import { Connection, SystemProgram, Transaction, clusterApiUrl } from '@solana/web3.js';
+import { Connection, SystemProgram, Transaction, clusterApiUrl } from '@kunci/web3.js';
 
-let connection = new Connection(clusterApiUrl('devnet'));
-let providerUrl = 'https://www.sollet.io';
+let connection = new Connection(clusterApiUrl('testnet'));
+let providerUrl = 'https://kunciwallet.com';
 let wallet = new Wallet(providerUrl);
 wallet.on('connect', publicKey => console.log('Connected to ' + publicKey.toBase58()));
 wallet.on('disconnect', () => console.log('Disconnected'));
@@ -40,12 +40,12 @@ let txid = await connection.sendRawTransaction(signed.serialize());
 await connection.confirmTransaction(txid);
 ```
 
-See [example/src/App.js](https://github.com/serum-foundation/sol-wallet-adapter/blob/master/example/src/App.js) for a full example.
+See [example/src/App.js](https://github.com/kuncicoin/wallet-connect/blob/master/example/src/App.tsx) for a full example.
 
 ### Sign a message
 
 ```js
-const providerUrl = 'https://www.sollet.io';
+const providerUrl = 'https://kunciwallet.com';
 const wallet = new Wallet(providerUrl);
 wallet.on('connect', publicKey => console.log('Connected to ' + publicKey.toBase58()));
 wallet.on('disconnect', () => console.log('Disconnected'));
@@ -64,15 +64,15 @@ See [create-react-library](https://github.com/transitive-bullshit/create-react-l
 
 ## Wallet Providers
 
-Wallet providers are third-party webapps that provide an API to retrieve the user's accounts and sign transactions with it. `sol-wallet-adapter` opens wallet providers in a popup and communicates with it using [JSON-RPC](https://www.jsonrpc.org/specification) over [`postMessage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
+Wallet providers are third-party webapps that provide an API to retrieve the user's accounts and sign transactions with it. `wallet-connect` opens wallet providers in a popup and communicates with it using [JSON-RPC](https://www.jsonrpc.org/specification) over [`postMessage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
 
-See [`spl-token-wallet`](https://github.com/serum-foundation/spl-token-wallet/blob/master/src/pages/PopupPage.js) for an example wallet provider implementation.
+See [`spl-token-wallet`](https://github.com/kuncicoin/spl-token-wallet/blob/master/src/pages/PopupPage.js) for an example wallet provider implementation.
 
 The general flow is as follows:
 
-1. User selects a wallet provider to connect to, e.g. `https://www.sollet.io`
+1. User selects a wallet provider to connect to, e.g. `https://kunciwallet.com`
 2. dApp opens the wallet provider in a popup, passing it the [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin) of the dApp and the desired network in the URL hash.
-    - e.g. `https://www.sollet.io/#origin=https://www.example.com&network=mainnet-beta`
+    - e.g. `https://kunciwallet.com/#origin=https://www.example.com&network=mainnet-beta`
 3. Wallet provider detects that `window.opener` is set and asks the user if they want to connect the wallet to the dApp.
     - The wallet UI should show the origin of the requesting dApp.
     - The origin can be retrieved from the URL hash using `new URLSearchParams(window.location.hash.slice(1)).get('origin')`.
@@ -91,12 +91,12 @@ The general flow is as follows:
 7. The wallet sends a JSON-RPC reply back to the dApp, either with a signature if the user accepted the request or an error if the user rejected the request.
 8. The dApp receives the signature, adds it to the transaction, and broadcasts it.
 
-Wallet provider developers can use the [example webapp](https://github.com/serum-foundation/sol-wallet-adapter/tree/master/example) to test their implementation.
+Wallet provider developers can use the [example webapp](https://github.com/kuncicoin/wallet-connect/tree/master/example) to test their implementation.
 
 ### URL hash parameters
 
 - `origin` - origin of the dApp. Should be included in all `postMessage` calls and should be checked against all received `MessageEvent`s.
-- `network` - The network on which transactions will be sent. Can be any of `mainnet-beta`, `devnet`, `testnet`, or a custom URL, though wallets are free to reject any unsupported networks. Wallet providers should check that transaction blockhashes matches the network before signing the transaction.
+- `network` - The network on which transactions will be sent. Can be any of `mainnet-beta`, `testnet`, or a custom URL, though wallets are free to reject any unsupported networks. Wallet providers should check that transaction blockhashes matches the network before signing the transaction.
 
 The parameters can be parsed using
 
@@ -106,7 +106,7 @@ let origin = params.get('origin');
 let network = params.get('network');
 ```
 
-### Requests from the wallet provider to the dApp (`sol-wallet-adapter`)
+### Requests from the wallet provider to the dApp (`wallet-connect`)
 
 #### connected
 
@@ -146,7 +146,7 @@ window.opener.postMessage({
 }, origin);
 ```
 
-### Requests from the dApp (`sol-wallet-adapter`) to the wallet provider
+### Requests from the dApp (`wallet-connect`) to the wallet provider
 
 #### signTransaction
 
@@ -154,7 +154,7 @@ Sent by the dApp when it needs to send a transaction on behalf of the user.
 
 ##### Parameters
 
-- `message` - Base-58 encoded transaction message for the wallet to sign. Generated by [`transaction.serializeMessage()`](https://solana-labs.github.io/solana-web3.js/class/src/transaction.js~Transaction.html#instance-method-serializeMessage).
+- `message` - Base-58 encoded transaction message for the wallet to sign. Generated by [`transaction.serializeMessage()`](https://solana-labs.github.io/solana-web3.js/classes/Transaction.html#serializeMessage).
 
 ##### Results
 

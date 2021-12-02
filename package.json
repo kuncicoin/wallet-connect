@@ -1,9 +1,9 @@
 {
-  "name": "@project-serum/sol-wallet-adapter",
+  "name": "@kunci/wallet-connect",
   "version": "0.2.5",
-  "description": "Library to allow Solana dApps to use third-party wallets to sign transactions",
+  "description": "Library to allow Kunci dApps to use third-party wallets to sign transactions",
   "license": "Apache-2.0",
-  "repository": "project-serum/sol-wallet-adapter",
+  "repository": "kuncicoin/wallet-connect",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "engines": {
@@ -23,10 +23,10 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "@solana/web3.js": "^1.5.0"
+    "@kunci/web3.js": "^1.30.1"
   },
   "devDependencies": {
-    "@solana/web3.js": "^1.29.2",
+    "@kunci/web3.js": "^1.30.1",
     "@types/bs58": "^4.0.1",
     "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
